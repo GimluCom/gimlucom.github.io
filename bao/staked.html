@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>BaoFarm total LP staked</title>
+<script>
+function checkContract() {
+    var cInput = document.getElementById("contractInput");
+    var pOut = document.getElementById("pOut");
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE) {
+            var valA = xhr.responseText;
+            valA = valA.replace('{"message":"OK","result":"','').replace('","status":"1"}','');
+            valA = '00000000000000000000'+valA; console.log(valA);
+            var valA = valA.substring(0, valA.length-18) + '.' + valA.substring(valA.length-18); console.log(valA);
+            while (valA.substring(0, 2) === '00') {
+                valA = valA.substring(1);
+                console.log(valA);
+            }
+            if (valA.substring(0, 2) !== '0.') {
+                valA = valA.substring(1)
+            }
+            console.log(valA);
+            pOut.innerHTML = valA + ' LP tokens';
+        }
+    }
+    xhr.open('GET', 'https://blockscout.com/poa/xdai/api?module=account&action=tokenbalance&contractaddress=0xF768945410933cA301C347FB6C945EC6E9B4c497&address='+cInput.value, true);
+    xhr.send(null);
+}
+</script>
+</head>
+<body>
+<input id="contractInput" type="text"/>
+<button onclick="checkContract()">Check</button>
+<br>
+<p id="pOut"></p>
+</body>
+</html>
